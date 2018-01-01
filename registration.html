@@ -1,0 +1,88 @@
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<style>
+
+</style>
+</head>
+<body>
+
+<script>
+var apiKey = 'LLB3TDGmJeWY06453_Yi0N7iGU6IEqlN';
+var myDB = 'arthistory';
+var myCollection = 'userScores';
+var users=[];
+var userCount;
+var myID;
+
+function loadPaintings(){
+$.ajax({
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/artHistoryPhotos?apiKey='+apiKey,
+   success: function(data) {
+     for (var i=0;i<data.length;i++){
+       paintings.push(new Painting(data[i].name,data[i].author,data[i].period,data[i].image,data[i]._id));
+     }
+     paintingsCount=paintings.length;
+     localStorage.setItem("paintings",JSON.stringify(paintings));
+localStorage.setItem("loaded","yes");
+   }});
+
+}
+
+localStorage.removeItem("userAccount")
+//localStorage.removeItem("loaded")
+function User(name,highScore,id){
+  this.id=id,
+  this.name=name;
+  this.highScore=highScore;
+  
+}
+
+if (!localStorage.getItem("userAccount")){
+  
+  var username=prompt("Въведи име");
+  var score=0;
+
+  
+  
+  var user={
+    name:username,
+    highScore:score
+  };
+  
+  if (username){
+  $.ajax( { 
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
+ data: JSON.stringify( [ user ] ),
+ type: 'POST',
+ contentType: 'application/json'
+} );
+  
+  localStorage.setItem("userAccount",name);
+  alert("sent!")
+  }
+}
+
+getScores();
+
+if (localStorage.getItem("loaded")!="yes"){
+  loadPaintings();
+  alert("loaded")
+}
+
+function getScores(){
+  $.ajax({
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
+   success: function(data) {
+     for (var i=0;i<data.length;i++){
+       users.push(new User(data[i].name,data[i].highScore,data[i]._id));
+     }
+     userCount=users.length;
+     localStorage.setItem("users",JSON.stringify(users));
+     myID=users[userCount-1].id.$oid;
+     localStorage.setItem("myID",myID);
+   }});
+}
+</script>
+</body>
+</html>
