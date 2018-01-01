@@ -1,0 +1,92 @@
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<style>
+body{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+p{
+  background-color:white;
+  margin:2vh;
+  text-align:center;
+  width:90%;
+  height:13vh;
+  padding:0 2vw;
+  font-family:"Roboto Condensed";
+  font-size:3.5em;
+  /*margin-left:-7vw;*/
+  border:0.5vw solid #333;
+  border-radius:1vh;
+}
+
+.name{
+  float:left;
+  
+}
+
+.score{
+  float:right;
+  background-color: #333;
+  color:white;
+  height:100%;
+  border-radius:0.5vw 0.5vw 0 0;
+  margin-right:-2vw;
+  width:20vw;
+  padding:0 2vw;
+  
+  
+}
+</style>
+</head>
+<body>
+<script>
+var apiKey = 'LLB3TDGmJeWY06453_Yi0N7iGU6IEqlN';
+
+function addIt(name,score){
+  document.body.innerHTML+="<p><span class='name'>"+name+"</span><span class='score'>"+score+"</span></p>";
+}
+
+function User(name,highScore,id){
+  this.id=id,
+  this.name=name,
+  this.highScore=highScore;
+  
+}
+
+  $.ajax({
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
+   success: function(data) {
+     var users1=[];
+     for (var i=0;i<data.length;i++){
+       users1.push(new User(data[i].name,data[i].highScore,data[i]._id));
+     }
+     localStorage.setItem("users",JSON.stringify(users1));
+
+   }});
+
+function comp(thing,thing2){
+	return thing2.highScore-thing.highScore;
+}
+var users=JSON.parse(localStorage.getItem("users"));
+
+users.sort(comp);
+console.log(users)
+
+
+for (var i=0;i<users.length;i++){
+  if (users[i].highScore&&users[i].name){
+  addIt(users[i].name,users[i].highScore);
+    
+  if (users[i].id.$oid==localStorage.getItem("myID")){
+    
+    $("p:last").css("background-color", "green");
+    $("p:last").css("color", "white");
+  }
+  }
+}
+</script>
+</body>
+</html>
