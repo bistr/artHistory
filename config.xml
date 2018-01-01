@@ -8,15 +8,6 @@
   
 <preference name="permissions" value="none" />
 
-    <preference name="SplashScreen" value="splash" /> 
-        <preference name="SplashScreenDelay" value="4000" />
-
-    
-
-    
-    <gap:plugin name="cordova-plugin-splashscreen" version="3.1.0" source="npm" />  
-    <!-- versionCode is Android only -->
-    <!-- version is in major.minor.patch format --> 
     <name>Art History</name>
  
     <description>
@@ -28,8 +19,6 @@
     </author>
 
 
-     <icon src="icon.png" />       
-    <splash src="splash.png" />
     <allow-intent href="*" />
 <access origin="*" />
  
