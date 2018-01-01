@@ -1,0 +1,189 @@
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<style>
+img {
+  width:105vw;
+  margin-top:-1px;
+  height:auto;
+}
+
+body{
+  /*background-color:#2d0c25;*/
+  /*background-color:#353839;*/
+  background-color: #fff;
+  position:fixed;
+  left:-5vw;
+  top:-3vh;
+}
+
+ul li{
+  list-style-type:none;
+  background-color:white;
+  margin:2vh;
+  text-align:center;
+  width:90%;
+  padding:2vh 0;
+  font-family:"Roboto Condensed";
+  font-size:1em;
+  /*margin-left:-7vw;*/
+  border:0.5vh solid #333;
+  border-radius:1vh;
+ }
+
+ul{
+  width:100vw;
+  position:fixed;
+  bottom:-10vh;
+  height:55vh;
+  background-color: #fff;
+ 
+}
+
+header{
+  background-color: rgb(51, 51, 51);
+  color:white;
+  z-index:900;
+  /*padding:2vh 4vw 1vh 4vw;*/
+  line-height: 42px;
+  padding: 8px 15px 0 15px;
+  display:flex;
+  flex-direction:horizontal;
+  justify-content:space-between;
+}
+
+
+</style>
+</head>
+<body>
+<header>
+<div id="currentScore">0</div>
+<div id="highScore">0</div>
+</header>
+<img id="image" src=""/>
+<p id="question"></p>
+<ul>
+  <li id="answer0" class="choice"></li>
+  <li id="answer1" class="choice"></li>
+  <li id="answer2" class="choice"></li>
+  <li id="answer3" class="choice"></li>
+</ul>
+
+<script>
+var gitLink="https://raw.githubusercontent.com/bistr/artHistoryPhotos/master/";
+var paintings=[];
+var paintingsCount;
+var apiKey = 'LLB3TDGmJeWY06453_Yi0N7iGU6IEqlN';
+var myDB = 'arthistory';
+var myCollection = 'artHistoryPhotos';
+var rightChoice;
+var currentScore=0;
+var highScore=localStorage.getItem("highScore");
+var myID=localStorage.getItem("myID");
+
+function randomNumberUpTo(high){
+  return Math.floor((Math.random() * (high+1)));
+  
+}
+
+function Painting(name,author,period,image,id){
+  this.name=name;
+  this.author=author;
+  this.period=period;
+  this.image=image;
+  this.id=id;
+}
+
+function updateScores(){
+if (currentScore>highScore){
+    highScore=currentScore;
+
+  }
+  $("#currentScore").text(currentScore);
+  $("#highScore").text(highScore);
+}
+
+function paintingWith(trait,notTheseIndices, notTheseValues){
+  var rand=randomNumberUpTo(paintingsCount-1);
+  //alert(rand)
+  var painting=paintings[rand];
+  while(painting[trait]=="None" || notTheseIndices.indexOf(rand)!=-1 || notTheseValues.indexOf(painting[trait])!=-1){
+    var rand=randomNumberUpTo(paintingsCount-1);
+    var painting=paintings[rand];
+  }
+  return painting;
+}
+
+function goodChoice(){
+  currentScore+=1;
+  updateScores();
+  askAbout(traits[randomNumberUpTo(2)]);
+}
+
+function badChoice(){
+  if (currentScore>=highScore){
+    highScore=currentScore;
+  $.ajax( { url: "https://api.mlab.com/api/1/databases/arthistory/collections/userScores/"+myID+"?apiKey="+apiKey,
+		  data: JSON.stringify( { "$set" : { "highScore" : highScore } } ),
+		  type: "PUT",
+		  contentType: "application/json" } );
+  }
+  currentScore=0;
+  updateScores();
+  localStorage.setItem("highScore", highScore)
+  askAbout(traits[randomNumberUpTo(2)]);
+}
+
+function checkChoice(rightChoice){
+  for(var i=0;i<4;i++){
+    $("#answer"+i).off()  
+    if(i==rightChoice){
+      $("#answer"+i).on("click",goodChoice)
+    }
+    else{
+      $("#answer"+i).on("click",badChoice);
+      
+    }
+  }
+}
+ 
+function askAbout(trait){
+  $(".choice").css("background-color", "white")
+  var usedIndices=[];
+  var usedValues=[];
+  var mainPainting=paintingWith(trait,usedIndices,usedValues);
+  usedIndices.push(mainPainting.id);
+  usedValues.push(mainPainting[trait]);
+  rightChoice=randomNumberUpTo(3);
+  for (var i=0;i<4;i++){
+    if (i!=rightChoice){
+    var wrongPainting=paintingWith(trait,usedIndices,usedValues);
+    $("#answer"+i).text(wrongPainting[trait]);
+      usedIndices.push(wrongPainting.id);
+      usedValues.push(wrongPainting[trait]);
+    }
+    else{
+      $("#answer"+i).text(mainPainting[trait]);
+      $("#answer"+i).css("background-color", "green")
+    }
+  }
+  
+  $("#image").attr("src",gitLink+mainPainting.image);
+  
+  checkChoice(rightChoice);
+  }
+
+
+  paintings=JSON.parse(localStorage.getItem("paintings"))
+  paintingsCount=paintings.length;
+  var traits=["name","author","period"];
+  updateScores();
+  askAbout(traits[randomNumberUpTo(2)])
+
+
+
+//askAbout(traits[randomNumberUpTo(2)])
+
+</script>
+</body>
+</html>
