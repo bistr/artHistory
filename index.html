@@ -15,7 +15,16 @@ var myCollection = 'userScores';
 var users=[];
 var userCount;
 var myID;
+var paintings=[];
 
+function Painting(name,author,period,image,id){
+  this.name=name;
+  this.author=author;
+  this.period=period;
+  this.image=image;
+  this.id=id;
+} 
+ 
 function loadPaintings(){
 $.ajax({
  url:'https://api.mlab.com/api/1/databases/arthistory/collections/artHistoryPhotos?apiKey='+apiKey,
@@ -25,7 +34,7 @@ $.ajax({
      }
      paintingsCount=paintings.length;
      localStorage.setItem("paintings",JSON.stringify(paintings));
-localStorage.setItem("loaded","yes");
+     localStorage.setItem("loaded","yes");
    }});
 
 }
@@ -85,7 +94,7 @@ if (!localStorage.getItem("userAccount")){
 } );
   
   localStorage.setItem("userAccount",name);
-  alert("sent!")
+  //alert("sent!")
   }
  getScoresIfNewUser();
 }
@@ -96,7 +105,7 @@ getScores();
 
 if (localStorage.getItem("loaded")!="yes"){
   loadPaintings();
-  alert("loaded")
+  //alert("loaded")
  setTimeout(function(){window.open("main.html")},5000);
 }
 
