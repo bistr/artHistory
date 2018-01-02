@@ -105,8 +105,10 @@ getScores();
 
 if (localStorage.getItem("loaded")!="yes"){
   loadPaintings();
+}
   //alert("loaded")
- setTimeout(function(){window.open("main.html")},5000);
+  else{
+window.open("main.html");
 }
 
 
