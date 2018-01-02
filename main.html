@@ -3,54 +3,83 @@
 <script src="jquery-3.2.1.slim.min.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 <style>
-img {
-  width:105vw;
+ @font-face {
+ font-family: roboto;
+ src: url(robotcho.ttf);
+	}
+html, body {
+   margin: 0;
+   padding: 0;
+}
+
+#image {
   margin-top:-1px;
-  height:auto;
+  max-width:150vw;
 }
 
 body{
   /*background-color:#2d0c25;*/
   /*background-color:#353839;*/
-  background-color: #fff;
+  background-color: #000;
   position:fixed;
-  left:-5vw;
-  top:-3vh;
+  font-family:roboto;
+/*   left:-5vw;*/
+/*   top:-3vh;  */
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction:column;
+  width:100vw;
 }
 
-ul li{
-  list-style-type:none;
+.choice{
   background-color:white;
-  margin:2vh;
+  margin:1vw;
   text-align:center;
-  width:90%;
-  padding:2vh 0;
-  font-family:"Roboto Condensed";
+  width:95%;
+  padding:1.5vh 0.5vw;
+  
   font-size:1em;
+  
   /*margin-left:-7vw;*/
-  border:0.5vh solid #333;
-  border-radius:1vh;
+  
+  border-radius:0.5vh;
  }
 
-ul{
+#choices{
   width:100vw;
   position:fixed;
-  bottom:-10vh;
-  height:55vh;
-  background-color: #fff;
+  bottom:0;
+  padding:1vh 0;
+  background-color:#fff;
+  background-color:rgb(51, 51, 51);
+  align-items:center;
+  display:flex;
+  flex-direction:column;
+  
+  
  
 }
 
 header{
+  width:100%;
   background-color: rgb(51, 51, 51);
   color:white;
   z-index:900;
   /*padding:2vh 4vw 1vh 4vw;*/
   line-height: 42px;
-  padding: 8px 15px 0 15px;
+/*   padding: 8px 15px 0 15px; */
   display:flex;
   flex-direction:horizontal;
   justify-content:space-between;
+}
+
+.scores{
+  padding:0 3vw;
+}
+
 }
 
 
@@ -58,17 +87,18 @@ header{
 </head>
 <body>
 <header>
-<div id="currentScore">0</div>
-<div id="highScore">0</div>
+<div id="currentScore" class="scores">0</div>
+<div id="question">This is the question</div>
+<div id="highScore" class="scores">0</div>
 </header>
 <img id="image" src=""/>
-<p id="question"></p>
-<ul>
-  <li id="answer0" class="choice"></li>
-  <li id="answer1" class="choice"></li>
-  <li id="answer2" class="choice"></li>
-  <li id="answer3" class="choice"></li>
-</ul>
+
+<div id="choices">
+  <p id="answer0" class="choice"></p>
+  <p id="answer1" class="choice"></p>
+  <p id="answer2" class="choice"></p>
+  <p id="answer3" class="choice"></p>
+</div>
 
 <script>
 var gitLink="https://raw.githubusercontent.com/bistr/artHistoryPhotos/master/";
@@ -101,7 +131,6 @@ function Painting(name,author,period,image,id){
 function updateScores(){
 if (currentScore>highScore){
     highScore=currentScore;
-
   }
   $("#currentScore").text(currentScore);
   $("#highScore").text(highScore);
@@ -141,7 +170,8 @@ function badChoice(){
   currentScore=0;
   updateScores();
   localStorage.setItem("highScore", highScore)
-  askAbout(traits[randomNumberUpTo(2)]);
+   askAbout(traits[randomNumberUpTo(2)]);
+  
 }
 
 function checkChoice(rightChoice){
@@ -158,6 +188,7 @@ function checkChoice(rightChoice){
 }
  
 function askAbout(trait){
+
   $(".choice").css("background-color", "white")
   var usedIndices=[];
   var usedValues=[];
@@ -177,22 +208,39 @@ function askAbout(trait){
       $("#answer"+i).css("background-color", "green")
     }
   }
-  
+ 
   $("#image").attr("src",gitLink+mainPainting.image);
-  
+   if(trait=="author"){
+    $("#question").text("Автор?")
+  }
+  else if(trait=="period"){
+    $("#question").text("Период?")  
+  }
+  else if(trait=="name"){
+    $("#question").text("Име?")  
+  }
+  $("#image").css("max-height",($(document).outerHeight()-$("#choices").outerHeight()).toString()+"px")
   checkChoice(rightChoice);
   }
 
 
+
+
+
   paintings=JSON.parse(localStorage.getItem("paintings"))
+
   paintingsCount=paintings.length;
+
   var traits=["name","author","period"];
+
   updateScores();
+  
   askAbout(traits[randomNumberUpTo(2)])
 
 
 
 //askAbout(traits[randomNumberUpTo(2)])
+
 
 </script>
 </body>
