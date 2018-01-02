@@ -7,7 +7,7 @@
  
   
 <preference name="permissions" value="none" />
-
+<plugin name="cordova-plugin-whitelist" />
     <name>Art History</name>
  
     <description>
