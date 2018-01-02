@@ -39,11 +39,24 @@ localStorage.setItem("loaded","yes");
      }
      userCount=users.length;
      localStorage.setItem("users",JSON.stringify(users));
-     myID=users[userCount-1].id.$oid;
-     localStorage.setItem("myID",myID);
+     myID=localStorage.getItem("myID");
    }});
 }
 
+ function getScoresIfNewUser(){
+  $.ajax({
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
+   success: function(data) {
+     for (var i=0;i<data.length;i++){
+       users.push(new User(data[i].name,data[i].highScore,data[i]._id));
+     }
+     userCount=users.length;
+     localStorage.setItem("users",JSON.stringify(users));
+     myID=users[userCount-1].id.$oid;
+     localStorage.setItem("myID",myID);
+   }});
+} 
+ 
 function User(name,highScore,id){
   this.id=id,
   this.name=name;
