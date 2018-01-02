@@ -87,9 +87,12 @@ if (!localStorage.getItem("userAccount")){
   localStorage.setItem("userAccount",name);
   alert("sent!")
   }
+ getScoresIfNewUser();
 }
-
+else{
+ 
 getScores();
+}
 
 if (localStorage.getItem("loaded")!="yes"){
   loadPaintings();
