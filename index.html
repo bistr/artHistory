@@ -8,6 +8,7 @@
 </head>
 <body>
 <a href="leaderboard.html">LeaderBoard</a>
+<a href="main.html">Play</a>
 <script>
 var apiKey = 'LLB3TDGmJeWY06453_Yi0N7iGU6IEqlN';
 var myDB = 'arthistory';
@@ -105,11 +106,10 @@ getScores();
 
 if (localStorage.getItem("loaded")!="yes"){
   loadPaintings();
+  
 }
   //alert("loaded")
-  else{
-window.open("main.html");
-}
+alert("Loaded! Ready to play?")
 
 
 </script>
