@@ -191,6 +191,7 @@ function badChoice(target){
   $("#answer"+rightChoice).addClass("rightAnswer")
   $(target).addClass("incorrect")
   importantQuestions.push(paintings[mainPainting.id-1])
+localStorage.setItem("importantQuestions",JSON.stringify(importantQuestions));
   setTimeout(function(){$("#answer"+rightChoice).removeClass("rightAnswer");
                         $(target).removeClass("incorrect");
  askAbout(traits[randomNumberUpTo(2)])},3000)
