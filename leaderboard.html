@@ -1,7 +1,6 @@
 <html>
 <head>
 <script src="jquery-3.2.1.slim.min.js"></script>
-<script type="text/javascript" src="cordova.js"></script>
 <style>
 @font-face {
     font-family: roboto;
@@ -71,7 +70,8 @@ header{
 </head>
 <body>
 
-<header> Класиране </header>	
+<header> Класиране </header>
+<div style="height:47px"></div>
 	
 <script>
 var apiKey = 'LLB3TDGmJeWY06453_Yi0N7iGU6IEqlN';
@@ -142,7 +142,7 @@ for (var i=0;i<users.length;i++){
 }
 
 document.getElementById("me").scrollIntoView();
-document.getElementById("me").scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+document.getElementById("me").scrollIntoView({behavior: "smooth", block: "end", inline: "center"});
 
 </script>
 </body>
