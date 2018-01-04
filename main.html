@@ -128,7 +128,7 @@ var currentScore=0;
 var mainPainting;
 var highScore=localStorage.getItem("highScore");
 var myID=localStorage.getItem("myID");
-var importantQuestions=localStorage.getItem("importantQuestions");
+var importantQuestions=JSON.parse(localStorage.getItem("importantQuestions"));
 
 function randomNumberUpTo(high){
   return Math.floor((Math.random() * (high+1)));
