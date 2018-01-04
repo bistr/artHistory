@@ -18,9 +18,15 @@ html, body {
 }
 
 body{
+  /*background-color:#2d0c25;*/
+  /*background-color:#353839;*/
   background-color: #000;
   position:fixed;
   font-family:roboto;
+/*   left:-5vw;*/
+/*   top:-3vh;  */
+  align-items: center;
+  flex-direction: column;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,8 +40,13 @@ body{
   text-align:center;
   width:95%;
   padding:1.5vh 0.5vw;
+  
   font-size:1em;
+  
+  /*margin-left:-7vw;*/
+  
   border-radius:0.5vh;
+  color:black;
  }
 
 #choices{
@@ -48,7 +59,9 @@ body{
   align-items:center;
   display:flex;
   flex-direction:column;
-   
+  
+  
+ 
 }
 
 header{
@@ -56,7 +69,9 @@ header{
   background-color: rgb(51, 51, 51);
   color:white;
   z-index:900;
+  /*padding:2vh 4vw 1vh 4vw;*/
   line-height: 42px;
+/*   padding: 8px 15px 0 15px; */
   display:flex;
   flex-direction:horizontal;
   justify-content:space-between;
@@ -65,6 +80,23 @@ header{
 .scores{
   padding:0 3vw;
 }
+
+.correct:active{
+  background-color:#097a09;
+  color: white;
+}
+
+.incorrect{
+  background-color: #ba0000;
+  color:white;
+}
+
+.rightAnswer{
+  background-color: #097a09 ;
+  color:white;
+}
+
+
 
 </style>
 </head>
@@ -83,6 +115,7 @@ header{
   <p id="answer3" class="choice"></p>
 </div>
 
+
 <script>
 var gitLink="https://raw.githubusercontent.com/bistr/artHistoryPhotos/master/";
 var paintings=[];
@@ -92,11 +125,10 @@ var myDB = 'arthistory';
 var myCollection = 'artHistoryPhotos';
 var rightChoice;
 var currentScore=0;
-if (!localStorage.getItem("highScore")){
-  localStorage.setItem("highScore",0);
-}
+var mainPainting;
 var highScore=localStorage.getItem("highScore");
 var myID=localStorage.getItem("myID");
+var importantQuestions=localStorage.getItem("importantQuestions");
 
 function randomNumberUpTo(high){
   return Math.floor((Math.random() * (high+1)));
@@ -119,18 +151,21 @@ if (currentScore>highScore){
   $("#highScore").text(highScore);
 }
 
-function paintingWith(trait,notTheseIndices, notTheseValues){
-  var rand=randomNumberUpTo(paintingsCount-1);
+function paintingWith(array,trait,notTheseIndices, notTheseValues, importantQuestions){
+  var rand=randomNumberUpTo(array.length-1);
   //alert(rand)
-  var painting=paintings[rand];
+  var painting=array[rand];
   while(painting[trait]=="None" || notTheseIndices.indexOf(rand)!=-1 || notTheseValues.indexOf(painting[trait])!=-1){
-    var rand=randomNumberUpTo(paintingsCount-1);
-    var painting=paintings[rand];
+    var rand=randomNumberUpTo(array.length-1);
+    var painting=array[rand];
   }
   return painting;
 }
 
 function goodChoice(){
+  if (importantQuestions.indexOf(mainPainting)!=-1 ){
+    importantQuestions.splice(importantQuestions.indexOf(mainPainting),1)
+  }
   currentScore+=1;
   updateScores();
   if (currentScore==highScore){
@@ -143,7 +178,7 @@ function goodChoice(){
   askAbout(traits[randomNumberUpTo(2)]);
 }
 
-function badChoice(){
+function badChoice(target){
   if (currentScore==highScore){
   $.ajax( { url: "https://api.mlab.com/api/1/databases/arthistory/collections/userScores/"+myID+"?apiKey="+apiKey,
 		  data: JSON.stringify( { "$set" : { "highScore" : highScore } } ),
@@ -153,42 +188,57 @@ function badChoice(){
   currentScore=0;
   updateScores();
   localStorage.setItem("highScore", highScore)
-   askAbout(traits[randomNumberUpTo(2)]);
-  
+  $("#answer"+rightChoice).addClass("rightAnswer")
+  $(target).addClass("incorrect")
+  importantQuestions.push(paintings[mainPainting.id-1])
+  setTimeout(function(){$("#answer"+rightChoice).removeClass("rightAnswer");
+                        $(target).removeClass("incorrect");
+ askAbout(traits[randomNumberUpTo(2)])},3000)
 }
 
 function checkChoice(rightChoice){
   for(var i=0;i<4;i++){
+    var t=i;
     $("#answer"+i).off()  
     if(i==rightChoice){
       $("#answer"+i).on("click",goodChoice)
     }
     else{
-      $("#answer"+i).on("click",badChoice);
+      $("#answer"+i).on("click",function(e){badChoice(e.target)});
       
     }
   }
 }
  
 function askAbout(trait){
-
-  $(".choice").css("background-color", "white")
+  $(".choice").removeClass("correct")
+  
   var usedIndices=[];
   var usedValues=[];
-  var mainPainting=paintingWith(trait,usedIndices,usedValues);
+  mainPainting=paintingWith(paintings,trait,usedIndices,usedValues);
+
+  if (importantQuestions.length>=3 && randomNumberUpTo(2)==2){
+    mainPainting=paintingWith(importantQuestions,trait,usedIndices,usedValues);
+
+  }
+  
   usedIndices.push(mainPainting.id);
+ 
   usedValues.push(mainPainting[trait]);
   rightChoice=randomNumberUpTo(3);
   for (var i=0;i<4;i++){
     if (i!=rightChoice){
-    var wrongPainting=paintingWith(trait,usedIndices,usedValues);
+    var wrongPainting=paintingWith(paintings,trait,usedIndices,usedValues);
     $("#answer"+i).text(wrongPainting[trait]);
       usedIndices.push(wrongPainting.id);
       usedValues.push(wrongPainting[trait]);
+      
+      
     }
     else{
       $("#answer"+i).text(mainPainting[trait]);
-      $("#answer"+i).css("background-color", "green")
+      $("#answer"+i).addClass("correct")
+      
     }
   }
  
@@ -218,11 +268,12 @@ function askAbout(trait){
 
   updateScores();
   
-  askAbout(traits[randomNumberUpTo(2)])
+  askAbout(traits[randomNumberUpTo(2)],importantQuestions)
 
 
 
 //askAbout(traits[randomNumberUpTo(2)])
+
 
 
 </script>
