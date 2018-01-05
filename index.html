@@ -157,10 +157,10 @@ if (!localStorage.getItem("userAccount")){
   }
  getScoresIfNewUser();
 }
-else{
- 
-getScores();
-}
+  else{
+    $("#buttonContainer").css("display","flex");
+  }
+
 
 if (localStorage.getItem("loaded")!="yes"){
   loadPaintings();
