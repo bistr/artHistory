@@ -13,7 +13,7 @@ html,body{
 
 body{
   position:fixed;
-  background: url("backround-image.jpg") no-repeat center center fixed;
+  background: url("background-image.jpg") no-repeat center center fixed;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,7 +72,7 @@ function Painting(name,author,period,image,id){
  
 function loadPaintings(){
 $.ajax({
- url:'https://api.mlab.com/api/1/databases/arthistory/collections/artHistoryPhotos?apiKey='+apiKey,
+  url:'https://api.mlab.com/api/1/databases/arthistory/collections/artHistoryPhotos?apiKey='+apiKey,
    success: function(data) {
      for (var i=0;i<data.length;i++){
        paintings.push(new Painting(data[i].name,data[i].author,data[i].period,data[i].image,data[i]._id));
@@ -80,7 +80,7 @@ $.ajax({
      paintingsCount=paintings.length;
      localStorage.setItem("paintings",JSON.stringify(paintings));
      localStorage.setItem("loaded","yes");
-   }
+   },
   statusCode: {
     200: function() {
       $("#buttonContainer").css("display","flex");
@@ -99,7 +99,13 @@ $.ajax({
      userCount=users.length;
      localStorage.setItem("users",JSON.stringify(users));
      myID=localStorage.getItem("myID");
-   }});
+   },
+    statusCode: {
+    200: function() {
+      $("#buttonContainer").css("display","flex");
+      }}
+});
+
 }
 
  function getScoresIfNewUser(){
