@@ -2,12 +2,57 @@
 <head>
 <script src="jquery-3.2.1.slim.min.js"></script>
 <style>
+  @font-face {
+    font-family: roboto;
+    src: url(robotcho.ttf);
+}
+html,body{
+  padding:0;
+  margin:0;
+}
 
+body{
+  position:fixed;
+  background: url("backround-image.jpg") no-repeat center center fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction:column;
+  height:100vw;
+  justify-content: center;
+  background-size:cover;
+}
+
+.buttons{
+  text-decoration:none;
+  background-color:white;
+  border:2px solid black;
+  padding:2vh;
+  border-radius:2vw;
+  color:black;
+  font-family:roboto;
+  width:80vw;
+  text-align:center;
+  margin:2vw;
+  
+}
+
+#buttonContainer{
+  margin-top:40vh;
+  display:flex;
+  flex-direction:column;
+  width:100vw;
+  align-items:center;
+  justify-content: center;
+  display:none;
+}
 </style>
 </head>
 <body>
-<a href="leaderboard.html">LeaderBoard</a>
-<a href="main.html">Play</a>
+<div id="buttonContainer">
+  <a href="main.html" class="buttons">Играй</a>
+  <a href="leaderboard.html" class="buttons">Класиране</a>
+</div>
 <script>
 var apiKey = 'LLB3TDGmJeWY06453_Yi0N7iGU6IEqlN';
 var myDB = 'arthistory';
@@ -35,7 +80,12 @@ $.ajax({
      paintingsCount=paintings.length;
      localStorage.setItem("paintings",JSON.stringify(paintings));
      localStorage.setItem("loaded","yes");
-   }});
+   }
+  statusCode: {
+    200: function() {
+      $("#buttonContainer").css("display","flex");
+      }}
+});
 
 }
  
@@ -66,7 +116,8 @@ $.ajax({
      var emptyArr=[];
      localStorage.setItem("importantQuestions",JSON.stringify(emptyArr));
      localStorage.setItem("highScore",0);
-   }});
+   }
+  });
 } 
  
 function User(name,highScore,id){
@@ -97,7 +148,6 @@ if (!localStorage.getItem("userAccount")){
 } );
   
   localStorage.setItem("userAccount",username);
-  //alert("sent!")
   }
  getScoresIfNewUser();
 }
@@ -108,10 +158,9 @@ getScores();
 
 if (localStorage.getItem("loaded")!="yes"){
   loadPaintings();
-  alert("Loading the paintings...")
+  
 }
-  //alert("loaded")
-alert("Loaded! Ready to play?")
+
 
 
 </script>
