@@ -96,11 +96,18 @@ function User(name,highScore,id){
      }
      localStorage.setItem("users",JSON.stringify(users1));
 
-   }});
+   },
+	  statusCode: {
+		  200: function() {
+			  loadBoard();
+		  }
+	  }
+  });
 
 function comp(thing,thing2){
 	return thing2.highScore-thing.highScore;
 }
+function loadBoard(){
 var users=JSON.parse(localStorage.getItem("users"));
 
 users.sort(comp);
@@ -143,7 +150,7 @@ for (var i=0;i<users.length;i++){
 
 document.getElementById("me").scrollIntoView();
 document.getElementById("me").scrollIntoView({behavior: "smooth", block: "end", inline: "center"});
-
+}
 </script>
 </body>
 </html>
