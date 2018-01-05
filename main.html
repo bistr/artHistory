@@ -221,8 +221,17 @@ function askAbout(trait){
     mainPainting=paintingWith(importantQuestions,trait,usedIndices,usedValues);
 
   }
-  $("#image").attr("src",gitLink+mainPainting.image);
-  usedIndices.push(mainPainting.id);
+	objImg = new Image();
+objImg.src = gitLink+mainPainting.image;
+objImg.onload = function() { 
+  $("#image").attr("src",objImg.src);
+  fillChoices();
+  checkChoice(rightChoice);
+}
+
+ 
+function fillChoices(){
+	usedIndices.push(mainPainting.id);
  
   usedValues.push(mainPainting[trait]);
   rightChoice=randomNumberUpTo(3);
@@ -252,7 +261,8 @@ function askAbout(trait){
   else if(trait=="name"){
     $("#question").text("Име?")  
   }
-  $("#image").css("max-height",($(document).outerHeight()-$("#choices").outerHeight()).toString()+"px")
+  $("#image").css("max-height",($(document).outerHeight()-$("#choices").outerHeight()).toString()+"px");
+}
   checkChoice(rightChoice);
   }
 
