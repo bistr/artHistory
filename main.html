@@ -352,11 +352,16 @@ function fillChoices(){
   rightChoice=randomNumberUpTo(3);
   for (var i=0;i<4;i++){
     if (i!=rightChoice){
+	var theSlaviVariable=randomNumberUpTo(80);
+	    if (trait=="author" && theSlaviVariable==77){
+		$("#answer"+i).text("Слави Трифонов");    
+	    }
+	    else{
     var wrongPainting=paintingWith(paintings,trait,usedIndices,usedValues);
     $("#answer"+i).text(wrongPainting[trait]);
       usedIndices.push(wrongPainting.id);
       usedValues.push(wrongPainting[trait]);
-      
+	    }
       
     }
     else{
