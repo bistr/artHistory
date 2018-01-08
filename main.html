@@ -245,6 +245,7 @@ function badChoice(target){
   $("#answer" + rightChoice).addClass("rightAnswer");
   $(target).addClass("incorrect");
   importantQuestions.push(paintings[mainPainting.id - 1]);
+localStorage.setItem("importantQuestions",JSON.stringify(importantQuestions));
 
   lives = lives - 1;
   $("#heart" + lives).attr(
