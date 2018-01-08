@@ -95,6 +95,50 @@ header{
   color:white;
 }
 
+.heart{
+  height:5vh;
+  z-index:900;
+}
+
+#hearts{
+  display:flex;
+  flex-direction:row;
+  position:fixed;
+  top:50px;
+  right:0;
+  
+}
+
+#popup{
+  display:none;
+  position:fixed;
+  left:3vw;
+  right:3vw;
+  top:2vh;
+  bottom:2vh;
+  background-color:#262628;
+  z-index:960;
+  border-radius:10vw;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  justify-content:center;
+  color:white;
+  font-size:2em;
+  
+  
+}
+#popupScore{
+  font-size:2em;
+  margin-bottom:5vh;
+}
+
+.popupButton{
+  margin:1vh;
+  width:80vw;
+  padding:1vh 2vh;
+  font-size:0.5em;
+}
 
 
 </style>
@@ -106,6 +150,12 @@ header{
 <div id="highScore" class="scores">0</div>
 </header>
 <img id="image" src=""/>
+<div id="hearts">
+  <img class="heart" id="heart0" src="filled-heart.png"/>
+  <img class="heart" id="heart1" src="filled-heart.png"/>
+  <img class="heart" id="heart2" src="filled-heart.png"/>
+</div>
+<div id="popup"></div>
 
 <div id="choices">
   <p id="answer0" class="choice"></p>
@@ -178,22 +228,85 @@ function goodChoice(){
 }
 
 function badChoice(target){
-  if (currentScore==highScore){
-  $.ajax( { url: "https://api.mlab.com/api/1/databases/arthistory/collections/userScores/"+myID+"?apiKey="+apiKey,
-		  data: JSON.stringify( { "$set" : { "highScore" : highScore } } ),
-		  type: "PUT",
-		  contentType: "application/json" } );
+  if (currentScore == highScore) {
+    $.ajax({
+      url:
+        "https://api.mlab.com/api/1/databases/arthistory/collections/userScores/" +
+        myID +
+        "?apiKey=" +
+        apiKey,
+      data: JSON.stringify({ $set: { highScore: highScore } }),
+      type: "PUT",
+      contentType: "application/json"
+    });
   }
-  currentScore=0;
-  updateScores();
-  localStorage.setItem("highScore", highScore)
-  $("#answer"+rightChoice).addClass("rightAnswer")
-  $(target).addClass("incorrect")
-  importantQuestions.push(paintings[mainPainting.id-1])
-localStorage.setItem("importantQuestions",JSON.stringify(importantQuestions));
-  setTimeout(function(){$("#answer"+rightChoice).removeClass("rightAnswer");
-                        $(target).removeClass("incorrect");
- askAbout(traits[randomNumberUpTo(2)])},3000)
+
+  localStorage.setItem("highScore", highScore);
+  $("#answer" + rightChoice).addClass("rightAnswer");
+  $(target).addClass("incorrect");
+  importantQuestions.push(paintings[mainPainting.id - 1]);
+
+  lives = lives - 1;
+  $("#heart" + lives).attr(
+    "src",
+    "empty-heart.png"
+  );
+  if (lives == 0) {
+    setTimeout(function(){
+    if(currentScore==highScore){
+      $("#popup").html(
+      "Новият ти рекорд е<span id='popupScore'>" +
+        currentScore +
+        "</span><button class='popupButton' id='buttonPlay'>Играй</button><button class='popupButton' id='buttonLead'>Класиране</button>"
+    );
+      
+    }
+    else{
+    $("#popup").html(
+      "Твоят резултат е<span id='popupScore'>" +
+        currentScore +
+        "</span><button class='popupButton' id='buttonPlay'>Играй</button><button class='popupButton' id='buttonLead'>Класиране</button>"
+    );
+    }
+      currentScore = 0;
+      updateScores();
+    $("#popup").css("display", "flex");
+    lives = 3;
+    
+
+    $("#buttonPlay").click(function() {
+      $("#answer" + rightChoice).removeClass("rightAnswer");
+      $(target).removeClass("incorrect");
+      $("#popup").css("display", "none");
+  $("#heart0").attr(
+    "src",
+    "filled-heart.png"
+  );
+      $("#heart1").attr(
+    "src",
+    "filled-heart.png"
+  );
+      $("#heart2").attr(
+    "src",
+    "filled-heart.png"
+  );
+      askAbout(traits[randomNumberUpTo(2)]);
+    });
+    $("#buttonLead").click(function() {
+      window.open("leaderboard.html");
+    });
+  },1000);
+  }
+else {
+    setTimeout(function() {
+      updateScores();
+      $("#answer" + rightChoice).removeClass("rightAnswer");
+      $(target).removeClass("incorrect");
+      askAbout(traits[randomNumberUpTo(2)]);
+    }, 1000);
+  }
+  
+
 }
 
 function checkChoice(rightChoice){
