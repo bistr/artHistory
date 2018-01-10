@@ -150,12 +150,17 @@ if (!localStorage.getItem("userAccount")){
  url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
  data: JSON.stringify( [ user ] ),
  type: 'POST',
- contentType: 'application/json'
+ contentType: 'application/json',
+ statusCode: {
+    200: function() {
+      localStorage.setItem("userAccount",username);
+      getScoresIfNewUser();
+      }}
 } );
   
-  localStorage.setItem("userAccount",username);
+  
   }
- getScoresIfNewUser();
+ 
 }
   else{
     $("#buttonContainer").css("display","flex");
