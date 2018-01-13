@@ -89,9 +89,20 @@ $.ajax({
 
 }
  
+  
+  function makeID() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 20; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+  
  function getScores(){
   $.ajax({
- url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScoresDebug?apiKey='+apiKey,
    success: function(data) {
      for (var i=0;i<data.length;i++){
        users.push(new User(data[i].name,data[i].highScore,data[i]._id));
@@ -110,7 +121,7 @@ $.ajax({
 
  function getScoresIfNewUser(){
   $.ajax({
- url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScoresDebug?apiKey='+apiKey,
    success: function(data) {
      for (var i=0;i<data.length;i++){
        users.push(new User(data[i].name,data[i].highScore,data[i]._id));
@@ -120,8 +131,7 @@ $.ajax({
     200: function() {
      userCount=users.length;
      localStorage.setItem("users",JSON.stringify(users));
-     myID=users[userCount-1].id.$oid;
-     localStorage.setItem("myID",myID);
+     localStorage.setItem("myID",newID);
      var emptyArr=[];
      localStorage.setItem("importantQuestions",JSON.stringify(emptyArr));
      localStorage.setItem("highScore",0);
@@ -143,16 +153,18 @@ if (!localStorage.getItem("userAccount")){
   var username=prompt("Въведи име");
   var score=0;
 
-  
+  var newID=makeID();
   
   var user={
+    _id:newID,
     name:username,
     highScore:score
+    
   };
   
   if (username){
   $.ajax( { 
- url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScoresDebug?apiKey='+apiKey,
  data: JSON.stringify( [ user ] ),
  type: 'POST',
  contentType: 'application/json',
