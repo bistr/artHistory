@@ -340,7 +340,7 @@ $("#choices").removeClass("avoid-clicks");
   var usedValues=[];
   mainPainting=paintingWith(paintings,trait,usedIndices,usedValues);
 
-  if (importantQuestions.length>=3 && randomNumberUpTo(2)==2){
+  if (importantQuestions.length>=10 && randomNumberUpTo(5)==2){
     mainPainting=paintingWith(importantQuestions,trait,usedIndices,usedValues);
 
   }
@@ -360,7 +360,7 @@ function fillChoices(){
   rightChoice=randomNumberUpTo(3);
   for (var i=0;i<4;i++){
     if (i!=rightChoice){
-	var theSlaviVariable=randomNumberUpTo(80);
+	var theSlaviVariable=randomNumberUpTo(100);
 	    if (trait=="author" && theSlaviVariable==77){
 		$("#answer"+i).text("Слави Трифонов");    
 	    }
