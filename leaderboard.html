@@ -88,7 +88,7 @@ function User(name,highScore,id){
 }
 
   $.ajax({
- url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScoresDebug?apiKey='+apiKey,
    success: function(data) {
      var users1=[];
      for (var i=0;i<data.length;i++){
