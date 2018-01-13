@@ -114,7 +114,9 @@ $.ajax({
    success: function(data) {
      for (var i=0;i<data.length;i++){
        users.push(new User(data[i].name,data[i].highScore,data[i]._id));
-     }
+     },
+        statusCode: {
+    200: function() {
      userCount=users.length;
      localStorage.setItem("users",JSON.stringify(users));
      myID=users[userCount-1].id.$oid;
@@ -122,6 +124,8 @@ $.ajax({
      var emptyArr=[];
      localStorage.setItem("importantQuestions",JSON.stringify(emptyArr));
      localStorage.setItem("highScore",0);
+    }
+        }
    }
   });
 } 
