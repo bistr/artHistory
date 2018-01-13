@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
     <widget xmlns   = "http://www.w3.org/ns/widgets"
         xmlns:gap   = "http://phonegap.com/ns/1.0"
-        id          = "com.phonegap.arthistory"
+        id          = "com.phonegap.arthistorydebug"
         versionCode = "1" 
         version     = "1.0.0" >
  
@@ -12,7 +12,7 @@
 <gap:plugin name="cordova-plugin-splashscreen" version="3.1.0" source="npm" />
 <preference name="orientation" value="portrait" />
 <plugin name="cordova-plugin-whitelist" />
-    <name>Art History</name>
+    <name>Bug History</name>
  
     <description>
         Your problems art history!
