@@ -38,9 +38,9 @@ body{
   margin:1vw;
   text-align:center;
   width:95%;
-  padding:1.5vh 0.5vw;
+  padding:1.55vh 0.5vw;
   
-  font-size:1em;
+  font-size:1.3em;
   
   /*margin-left:-7vw;*/
   
@@ -80,7 +80,7 @@ header{
   padding:0 3vw;
 }
 
-.correct:active{
+.correct{
   background-color:#097a09;
   color: white;
 }
@@ -138,6 +138,10 @@ header{
   width:80vw;
   padding:1vh 2vh;
   font-size:0.5em;
+}
+	
+.avoid-clicks {
+  pointer-events: none;
 }
 
 
@@ -213,6 +217,8 @@ function paintingWith(array,trait,notTheseIndices, notTheseValues, importantQues
 }
 
 function goodChoice(){
+$("#answer" + rightChoice).addClass("correct");
+  $("#choices").addClass("avoid-clicks");
   if (importantQuestions.indexOf(mainPainting)!=-1 ){
     importantQuestions.splice(importantQuestions.indexOf(mainPainting),1)
   }
@@ -224,11 +230,12 @@ function goodChoice(){
 		  type: "PUT",
 		  contentType: "application/json" } );
   }
-  localStorage.setItem("highScore", highScore)
-  askAbout(traits[randomNumberUpTo(2)]);
+  localStorage.setItem("highScore", highScore);
+  setTimeout(function(){askAbout(traits[randomNumberUpTo(2)]);},200);
 }
 
 function badChoice(target){
+$("#choices").addClass("avoid-clicks");
   if (currentScore == highScore) {
     $.ajax({
       url:
@@ -326,7 +333,8 @@ function checkChoice(rightChoice){
 }
  
 function askAbout(trait){
-  $(".choice").removeClass("correct")
+   $(".choice").removeClass("correct");
+$("#choices").removeClass("avoid-clicks");
   
   var usedIndices=[];
   var usedValues=[];
