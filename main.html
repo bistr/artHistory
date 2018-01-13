@@ -219,7 +219,7 @@ function goodChoice(){
   currentScore+=1;
   updateScores();
   if (currentScore==highScore){
-  $.ajax( { url: "https://api.mlab.com/api/1/databases/arthistory/collections/userScores/"+myID+"?apiKey="+apiKey,
+  $.ajax( { url: "https://api.mlab.com/api/1/databases/arthistory/collections/userScoresDebug/"+myID+"?apiKey="+apiKey,
 		  data: JSON.stringify( { "$set" : { "highScore" : highScore } } ),
 		  type: "PUT",
 		  contentType: "application/json" } );
@@ -232,7 +232,7 @@ function badChoice(target){
   if (currentScore == highScore) {
     $.ajax({
       url:
-        "https://api.mlab.com/api/1/databases/arthistory/collections/userScores/" +
+        "https://api.mlab.com/api/1/databases/arthistory/collections/userScoresDebug/" +
         myID +
         "?apiKey=" +
         apiKey,
