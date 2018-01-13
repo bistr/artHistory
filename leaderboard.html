@@ -111,7 +111,7 @@ function loadBoard(){
 var users=JSON.parse(localStorage.getItem("users"));
 
 users.sort(comp);
-console.log(users)
+//console.log(users)
 
 var rank=0;
 for (var i=0;i<users.length;i++){
@@ -136,8 +136,16 @@ for (var i=0;i<users.length;i++){
       $("p").last().css("text-shadow","1px 2px #333")
       $("p").last().css("box-shadow","1px 1px 5px white, -1px -1px 5px white")
     }
-    
-  if (users[i].id.$oid==localStorage.getItem("myID")){
+    if (!(users[i].id.$oid)){
+	    if(users[i].id==localStorage.getItem("myID")){
+		        $("p:last").css("background-color", "green");
+    $("p:last").css("color", "white");
+    $("p").last().css("text-shadow","1px 2px #333")
+    $("p").last().css("box-shadow","1px 1px 8px white, -1px -1px 8px white")
+    $("p").last().attr("id","me");
+	    }
+    }
+  else if (users[i].id.$oid==localStorage.getItem("myID")){
     
     $("p:last").css("background-color", "green");
     $("p:last").css("color", "white");
