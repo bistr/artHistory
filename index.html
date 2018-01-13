@@ -89,6 +89,14 @@ $.ajax({
 
 }
  
+ function makeID() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (var i = 0; i < 20; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
+}
+  
  function getScores(){
   $.ajax({
  url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
@@ -105,9 +113,7 @@ $.ajax({
       $("#buttonContainer").css("display","flex");
       }}
 });
-
 }
-
  function getScoresIfNewUser(){
   $.ajax({
  url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
@@ -115,14 +121,18 @@ $.ajax({
      for (var i=0;i<data.length;i++){
        users.push(new User(data[i].name,data[i].highScore,data[i]._id));
      }
+   },
+        statusCode: {
+    200: function() {
      userCount=users.length;
      localStorage.setItem("users",JSON.stringify(users));
-     myID=users[userCount-1].id.$oid;
-     localStorage.setItem("myID",myID);
+     localStorage.setItem("myID",newID);
      var emptyArr=[];
      localStorage.setItem("importantQuestions",JSON.stringify(emptyArr));
      localStorage.setItem("highScore",0);
-   }
+    }
+        }
+   
   });
 } 
  
@@ -132,17 +142,17 @@ function User(name,highScore,id){
   this.highScore=highScore;
   
 }
-
 if (!localStorage.getItem("userAccount")){
   loadPaintings();
   var username=prompt("Въведи име");
   var score=0;
-
-  
+  var newID=makeID();
   
   var user={
+    _id:newID,
     name:username,
     highScore:score
+    
   };
   
   if (username){
@@ -165,8 +175,6 @@ if (!localStorage.getItem("userAccount")){
   else{
     $("#buttonContainer").css("display","flex");
   }
-
-
 if (localStorage.getItem("loaded")!="yes"){
   loadPaintings();
   
