@@ -142,7 +142,7 @@ function User(name,highScore,id){
   this.highScore=highScore;
   
 }
-if (!localStorage.getItem("userAccount")){
+if (!localStorage.getItem("userAccount") || localStorage.getItem("myID")=="5a587239bd966f65a4b9a924"){
   loadPaintings();
   var username=prompt("Въведи име");
   var score=0;
