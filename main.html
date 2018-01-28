@@ -367,11 +367,10 @@ objImg.onload = function() {
 
  
 function fillChoices(){
-	alert("entered fillChoices");
-	usedIndices.push(mainPainting.id);
- 
-  usedValues.push(mainPainting[trait]);
-	alert(mainPainting.name);
+alert("entered fillChoices");
+usedIndices.push(mainPainting.id);
+usedValues.push(mainPainting[trait]);
+alert(mainPainting.name);
 if(paleoMezoNeo.indexOf(mainPainting.name)!=-1)
 		    {
 			    alert("1");
@@ -407,30 +406,29 @@ else if(egyptKingdoms.indexOf(mainPainting.name)!=-1){
 			    $("#answer"+3).text("Зряла класика");
 			    rightChoice=vizantiq.indexOf(mainPainting.name);
 		    }	
-	else{
-		alert("5");
-  rightChoice=randomNumberUpTo(3);
-  for (var i=0;i<4;i++){
-    if (i!=rightChoice){
-	var theSlaviVariable=randomNumberUpTo(100);
-	    if (trait=="author" && theSlaviVariable==77){
-		$("#answer"+i).text("Слави Трифонов");    
-	    }
-	    else{
-		    
-    var wrongPainting=paintingWith(paintings,trait,usedIndices,usedValues);
-    $("#answer"+i).text(wrongPainting[trait]);
-      usedIndices.push(wrongPainting.id);
-      usedValues.push(wrongPainting[trait]);
-	    }
-	    }
-      
-    }
-    else{
-      $("#answer"+i).text(mainPainting[trait]);
-      //$("#answer"+i).addClass("correct")
-      
-    }
+else{
+	alert("5");
+	rightChoice=randomNumberUpTo(3);
+	for (var i=0;i<4;i++){
+		if (i!=rightChoice){
+			var theSlaviVariable=randomNumberUpTo(100);
+			if (trait=="author" && theSlaviVariable==77){
+				$("#answer"+i).text("Слави Трифонов");    
+			}
+			else{
+
+				var wrongPainting=paintingWith(paintings,trait,usedIndices,usedValues);
+				$("#answer"+i).text(wrongPainting[trait]);
+				usedIndices.push(wrongPainting.id);
+				usedValues.push(wrongPainting[trait]);
+			}
+		  }
+		else{
+      			$("#answer"+i).text(mainPainting[trait]);
+  
+    		}
+	}
+}
   
  
   
