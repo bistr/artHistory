@@ -171,6 +171,7 @@ header{
 
 <script>
 var gitLink="https://raw.githubusercontent.com/bistr/artHistoryPhotos/master/";
+var gitLink2="https://raw.githubusercontent.com/bistr/artHistoryPhotos2/master/";
 var paintings=[];
 var paintingsCount;
 var apiKey = 'LLB3TDGmJeWY06453_Yi0N7iGU6IEqlN';
@@ -231,7 +232,7 @@ $("#answer" + rightChoice).addClass("correct");
 		  contentType: "application/json" } );
   }
   localStorage.setItem("highScore", highScore);
-  setTimeout(function(){askAbout(traits[randomNumberUpTo(2)]);},200);
+  setTimeout(function(){askAbout(traits[randomNumberUpTo(4)]);},200);
 }
 
 function badChoice(target){
@@ -299,7 +300,7 @@ localStorage.setItem("importantQuestions",JSON.stringify(importantQuestions));
     "src",
     "filled-heart.png"
   );
-      askAbout(traits[randomNumberUpTo(2)]);
+      askAbout(traits[randomNumberUpTo(4)]);
     });
     $("#buttonLead").click(function() {
       window.open("leaderboard.html");
@@ -311,7 +312,7 @@ else {
       updateScores();
       $("#answer" + rightChoice).removeClass("rightAnswer");
       $(target).removeClass("incorrect");
-      askAbout(traits[randomNumberUpTo(2)]);
+      askAbout(traits[randomNumberUpTo(4)]);
     }, 1000);
   }
   
@@ -345,7 +346,12 @@ $("#choices").removeClass("avoid-clicks");
 
   }
 	objImg = new Image();
+	if (mainPainting.image.substr(mainPainting.image.length-1)=="z"){
+	objImg.src = gitLink2+mainPainting.image.slice(0, -1);	
+	}
+	else{
 objImg.src = gitLink+mainPainting.image;
+	}
 objImg.onload = function() { 
   $("#image").attr("src",objImg.src);
   fillChoices();
@@ -384,7 +390,7 @@ function fillChoices(){
     $("#question").text("Автор?")
   }
   else if(trait=="period"){
-    $("#question").text("Период?")  
+    $("#question").text(" ")  
   }
   else if(trait=="name"){
     $("#question").text("Име?")  
@@ -402,11 +408,11 @@ function fillChoices(){
 
   paintingsCount=paintings.length;
 
-  var traits=["name","author","period"];
+  var traits=["name","author","period","name","period"];
 
   updateScores();
   
-  askAbout(traits[randomNumberUpTo(2)],importantQuestions)
+  askAbout(traits[randomNumberUpTo(4)],importantQuestions)
 
 
 
