@@ -350,6 +350,7 @@ $("#choices").removeClass("avoid-clicks");
     mainPainting=paintingWith(importantQuestions,trait,usedIndices,usedValues);
 
   }
+	alert(mainPainting.name);
 	objImg = new Image();
 	if (mainPainting.image.substr(mainPainting.image.length-1)=="z"){
 	objImg.src = gitLink2+mainPainting.image.slice(0, -1);	
@@ -357,7 +358,7 @@ $("#choices").removeClass("avoid-clicks");
 	else{
 objImg.src = gitLink+mainPainting.image;
 	}
-	alert(omgImg.src);
+	alert(objImg.src);
 objImg.onload = function() { 
   $("#image").attr("src",objImg.src);
 	alert("about to enter fillChoices");
