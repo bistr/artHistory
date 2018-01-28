@@ -358,18 +358,21 @@ objImg.src = gitLink+mainPainting.image;
 	}
 objImg.onload = function() { 
   $("#image").attr("src",objImg.src);
+	alert("about to enter fillChoices");
   fillChoices();
   
 }
 
  
 function fillChoices(){
+	alert("entered fillChoices");
 	usedIndices.push(mainPainting.id);
  
   usedValues.push(mainPainting[trait]);
-	
+	alert(mainPainting.name);
 if(paleoMezoNeo.indexOf(mainPainting.name)!=-1)
 		    {
+			    alert("1");
 			    $("#answer"+0).text("Палеолит");
 			    $("#answer"+1).text("Мезолит");
 			    $("#answer"+2).text("Неолит");
@@ -377,6 +380,7 @@ if(paleoMezoNeo.indexOf(mainPainting.name)!=-1)
 			    rightChoice=paleoMezoNeo.indexOf(mainPainting.name);
 		    }
 else if(egyptKingdoms.indexOf(mainPainting.name)!=-1){
+	 alert("2");
 	$("#answer"+0).text("Новоегипетско царство");
 			    $("#answer"+1).text("Средноегипетско царство");
 			    $("#answer"+2).text("Староегипетско царство");
@@ -385,6 +389,7 @@ else if(egyptKingdoms.indexOf(mainPainting.name)!=-1){
 }
 		    else if(classics.indexOf(mainPainting.name)!=-1)
 		    {
+			     alert("3");
 			    $("#answer"+0).text("Ранна класика");
 			    $("#answer"+1).text("Зряла класика");
 			    $("#answer"+2).text("Късна класика");
@@ -393,6 +398,7 @@ else if(egyptKingdoms.indexOf(mainPainting.name)!=-1){
 		    }
  else if(vizantiq.indexOf(mainPainting.name)!=-1)
 		    {
+			     alert("4");
 			    $("#answer"+0).text("Ранновизантийски период");
 			    $("#answer"+1).text("Средновизантийски период");
 			    $("#answer"+2).text("Късновизантийски период");
@@ -400,6 +406,7 @@ else if(egyptKingdoms.indexOf(mainPainting.name)!=-1){
 			    rightChoice=vizantiq.indexOf(mainPainting.name);
 		    }	
 	else{
+		alert("5");
   rightChoice=randomNumberUpTo(3);
   for (var i=0;i<4;i++){
     if (i!=rightChoice){
@@ -436,6 +443,7 @@ else if(egyptKingdoms.indexOf(mainPainting.name)!=-1){
   }
   $("#image").css("max-height",($(document).outerHeight()-$("#choices").outerHeight()).toString()+"px");
 }
+	alert("got to checkchoice");
   checkChoice(rightChoice);
   }
 
