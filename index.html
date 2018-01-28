@@ -84,7 +84,6 @@ $.ajax({
    },
   statusCode: {
     200: function() {
-      alert("we loaded it");
       $("#buttonContainer").css("display","flex");
       }}
 });
@@ -157,7 +156,6 @@ function User(name,highScore,id){
   
 }
   checkVersion();
-  alert("checked it");
 if (!localStorage.getItem("userAccount") || localStorage.getItem("myID")=="5a587239bd966f65a4b9a924"){
  
   var username=prompt("Въведи име");
