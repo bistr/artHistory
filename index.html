@@ -61,6 +61,7 @@ var users=[];
 var userCount;
 var myID;
 var paintings=[];
+  var version=0;
 
 function Painting(name,author,period,image,id){
   this.name=name;
@@ -79,7 +80,7 @@ $.ajax({
      }
      paintingsCount=paintings.length;
      localStorage.setItem("paintings",JSON.stringify(paintings));
-     localStorage.setItem("loaded","yes");
+     localStorage.setItem("loaded",version);
    },
   statusCode: {
     200: function() {
@@ -97,23 +98,34 @@ $.ajax({
   return text;
 }
   
- function getScores(){
-  $.ajax({
- url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
+function checkVersion(){
+    
+    $.ajax({
+ url:'https://api.mlab.com/api/1/databases/arthistory/collections/maintenance/0?apiKey='+apiKey,
    success: function(data) {
-     for (var i=0;i<data.length;i++){
-       users.push(new User(data[i].name,data[i].highScore,data[i]._id));
-     }
-     userCount=users.length;
-     localStorage.setItem("users",JSON.stringify(users));
-     myID=localStorage.getItem("myID");
+     version=data.event;    
    },
-    statusCode: {
-    200: function() {
-      $("#buttonContainer").css("display","flex");
-      }}
+      statusCode:{
+        200: function(){
+          if(!localStorage.getItem("loaded")){
+      loadPaintings();
+      
+    }
+    else if (localStorage.getItem("loaded")!=version){
+      loadPaintings();
+    }
+          else{
+            $("#buttonContainer").css("display","flex");
+          }
+          
+          
+        }
+        
+      }
 });
-}
+  }
+    
+
  function getScoresIfNewUser(){
   $.ajax({
  url:'https://api.mlab.com/api/1/databases/arthistory/collections/userScores?apiKey='+apiKey,
@@ -173,13 +185,11 @@ if (!localStorage.getItem("userAccount") || localStorage.getItem("myID")=="5a587
  
 }
   else{
-    $("#buttonContainer").css("display","flex");
+    checkVersion();
+    
   }
-if (localStorage.getItem("loaded")!="yes"){
-  loadPaintings();
   
-}
-
+  
 
 
 </script>
