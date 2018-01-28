@@ -171,6 +171,7 @@ header{
 
 <script>
 var gitLink="https://raw.githubusercontent.com/bistr/artHistoryPhotos/master/";
+var gitLink2="https://raw.githubusercontent.com/bistr/artHistoryPhotos2/master/";
 var paintings=[];
 var paintingsCount;
 var apiKey = 'LLB3TDGmJeWY06453_Yi0N7iGU6IEqlN';
@@ -183,7 +184,11 @@ var mainPainting;
 var highScore=localStorage.getItem("highScore");
 var myID=localStorage.getItem("myID");
 var importantQuestions=JSON.parse(localStorage.getItem("importantQuestions"));
-
+var paleoMezoNeo=["Палеолит","Мезолит","Неолит"]
+var egyptKingdoms=["Староегипетско царство", "Средноегипетско царство", "Новоегипетско царство"];
+var classics=["Ранна класика (суров стил)","Зряла класика","Късна класика"];
+var vizantiq=["Ранновизантийски период","Средновизантийски период","Късновизантийски период"];
+	
 function randomNumberUpTo(high){
   return Math.floor((Math.random() * (high+1)));
   
@@ -231,7 +236,7 @@ $("#answer" + rightChoice).addClass("correct");
 		  contentType: "application/json" } );
   }
   localStorage.setItem("highScore", highScore);
-  setTimeout(function(){askAbout(traits[randomNumberUpTo(2)]);},200);
+  setTimeout(function(){askAbout(traits[randomNumberUpTo(4)]);},200);
 }
 
 function badChoice(target){
@@ -299,7 +304,7 @@ localStorage.setItem("importantQuestions",JSON.stringify(importantQuestions));
     "src",
     "filled-heart.png"
   );
-      askAbout(traits[randomNumberUpTo(2)]);
+      askAbout(traits[randomNumberUpTo(4)]);
     });
     $("#buttonLead").click(function() {
       window.open("leaderboard.html");
@@ -311,7 +316,7 @@ else {
       updateScores();
       $("#answer" + rightChoice).removeClass("rightAnswer");
       $(target).removeClass("incorrect");
-      askAbout(traits[randomNumberUpTo(2)]);
+      askAbout(traits[randomNumberUpTo(4)]);
     }, 1000);
   }
   
@@ -344,53 +349,101 @@ $("#choices").removeClass("avoid-clicks");
     mainPainting=paintingWith(importantQuestions,trait,usedIndices,usedValues);
 
   }
+
 	objImg = new Image();
+	if (mainPainting.image.substr(mainPainting.image.length-1)=="z"){
+	objImg.src = gitLink2+mainPainting.image.slice(0, -1);	
+	}
+	else{
 objImg.src = gitLink+mainPainting.image;
+	}
+
 objImg.onload = function() { 
   $("#image").attr("src",objImg.src);
+
   fillChoices();
   checkChoice(rightChoice);
 }
 
  
 function fillChoices(){
-	usedIndices.push(mainPainting.id);
- 
-  usedValues.push(mainPainting[trait]);
-  rightChoice=randomNumberUpTo(3);
-  for (var i=0;i<4;i++){
-    if (i!=rightChoice){
-	var theSlaviVariable=randomNumberUpTo(100);
-	    if (trait=="author" && theSlaviVariable==77){
-		$("#answer"+i).text("Слави Трифонов");    
-	    }
-	    else{
-    var wrongPainting=paintingWith(paintings,trait,usedIndices,usedValues);
-    $("#answer"+i).text(wrongPainting[trait]);
-      usedIndices.push(wrongPainting.id);
-      usedValues.push(wrongPainting[trait]);
-	    }
-      
-    }
-    else{
-      $("#answer"+i).text(mainPainting[trait]);
-      //$("#answer"+i).addClass("correct")
-      
-    }
-  }
+
+usedIndices.push(mainPainting.id);
+usedValues.push(mainPainting[trait]);
+
+if(paleoMezoNeo.indexOf(mainPainting.name)!=-1)
+		    {
+
+			    $("#answer"+0).text("Палеолит");
+			    $("#answer"+1).text("Мезолит");
+			    $("#answer"+2).text("Неолит");
+			    $("#answer"+3).text("Шумер");
+			    rightChoice=paleoMezoNeo.indexOf(mainPainting.name);
+		    }
+else if(egyptKingdoms.indexOf(mainPainting.name)!=-1){
+
+	$("#answer"+0).text("Новоегипетско царство");
+			    $("#answer"+1).text("Средноегипетско царство");
+			    $("#answer"+2).text("Староегипетско царство");
+			    $("#answer"+3).text("Асирия");
+	rightChoice=egyptKingdoms.indexOf(mainPainting.name);
+}
+		    else if(classics.indexOf(mainPainting.name)!=-1)
+		    {
+
+			    $("#answer"+0).text("Ранна класика");
+			    $("#answer"+1).text("Зряла класика");
+			    $("#answer"+2).text("Късна класика");
+			    $("#answer"+3).text("Проторенесанс");
+			    rightChoice=classics.indexOf(mainPainting.name);
+		    }
+ else if(vizantiq.indexOf(mainPainting.name)!=-1)
+		    {
+
+			    $("#answer"+0).text("Ранновизантийски период");
+			    $("#answer"+1).text("Средновизантийски период");
+			    $("#answer"+2).text("Късновизантийски период");
+			    $("#answer"+3).text("Зряла класика");
+			    rightChoice=vizantiq.indexOf(mainPainting.name);
+		    }	
+else{
+
+	rightChoice=randomNumberUpTo(3);
+	for (var i=0;i<4;i++){
+		if (i!=rightChoice){
+			var theSlaviVariable=randomNumberUpTo(100);
+			if (trait=="author" && theSlaviVariable==77){
+				$("#answer"+i).text("Слави Трифонов");    
+			}
+			else{
+
+				var wrongPainting=paintingWith(paintings,trait,usedIndices,usedValues);
+				$("#answer"+i).text(wrongPainting[trait]);
+				usedIndices.push(wrongPainting.id);
+				usedValues.push(wrongPainting[trait]);
+			}
+		  }
+		else{
+      			$("#answer"+i).text(mainPainting[trait]);
+  
+    		}
+	}
+}
+  
  
   
    if(trait=="author"){
     $("#question").text("Автор?")
   }
   else if(trait=="period"){
-    $("#question").text("Период?")  
+    $("#question").text(" ")  
   }
   else if(trait=="name"){
     $("#question").text("Име?")  
   }
   $("#image").css("max-height",($(document).outerHeight()-$("#choices").outerHeight()).toString()+"px");
 }
+
   checkChoice(rightChoice);
   }
 
@@ -402,11 +455,11 @@ function fillChoices(){
 
   paintingsCount=paintings.length;
 
-  var traits=["name","author","period"];
+  var traits=["name","author","period","name","period"];
 
   updateScores();
-  
-  askAbout(traits[randomNumberUpTo(2)],importantQuestions)
+
+  askAbout(traits[randomNumberUpTo(4)],importantQuestions)
 
 
 
