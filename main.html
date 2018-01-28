@@ -338,6 +338,7 @@ function checkChoice(rightChoice){
 }
  
 function askAbout(trait){
+	alert("entered askabout");
    $(".choice").removeClass("correct");
 $("#choices").removeClass("avoid-clicks");
   
@@ -356,6 +357,7 @@ $("#choices").removeClass("avoid-clicks");
 	else{
 objImg.src = gitLink+mainPainting.image;
 	}
+	alert(omgImg.src);
 objImg.onload = function() { 
   $("#image").attr("src",objImg.src);
 	alert("about to enter fillChoices");
@@ -458,7 +460,7 @@ else if(egyptKingdoms.indexOf(mainPainting.name)!=-1){
   var traits=["name","author","period","name","period"];
 
   updateScores();
-  
+  alert("about to enter askabout");
   askAbout(traits[randomNumberUpTo(4)],importantQuestions)
 
 
