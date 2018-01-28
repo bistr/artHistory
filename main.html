@@ -184,7 +184,11 @@ var mainPainting;
 var highScore=localStorage.getItem("highScore");
 var myID=localStorage.getItem("myID");
 var importantQuestions=JSON.parse(localStorage.getItem("importantQuestions"));
-
+var paleoMezoNeo=["Палеолит","Мезолит","Неолит"]
+var egyptKingdoms=["Староегипетско царство", "Средноегипетско царство", "Новоегипетско царство"];
+var classics=["Ранна класика (суров стил)","Зряла класика","Късна класика"];
+var vizantiq=["Ранновизантийски период","Средновизантийски период","Късновизантийски период"];
+	
 function randomNumberUpTo(high){
   return Math.floor((Math.random() * (high+1)));
   
@@ -355,7 +359,7 @@ objImg.src = gitLink+mainPainting.image;
 objImg.onload = function() { 
   $("#image").attr("src",objImg.src);
   fillChoices();
-  checkChoice(rightChoice);
+  
 }
 
  
@@ -363,6 +367,39 @@ function fillChoices(){
 	usedIndices.push(mainPainting.id);
  
   usedValues.push(mainPainting[trait]);
+	
+if(paleoMezoNeo.indexOf(mainPainting.name)!=-1)
+		    {
+			    $("#answer"+0).text("Палеолит");
+			    $("#answer"+1).text("Мезолит");
+			    $("#answer"+2).text("Неолит");
+			    $("#answer"+3).text("Шумер");
+			    rightChoice=paleoMezoNeo.indexOf(mainPainting.name);
+		    }
+else if(egyptKingdoms.indexOf(mainPainting.name)!=-1){
+	$("#answer"+0).text("Новоегипетско царство");
+			    $("#answer"+1).text("Средноегипетско царство");
+			    $("#answer"+2).text("Староегипетско царство");
+			    $("#answer"+3).text("Асирия");
+	rightChoice=egyptKingdoms.indexOf(mainPainting.name);
+}
+		    else if(classics.indexOf(mainPainting.name)!=-1)
+		    {
+			    $("#answer"+0).text("Ранна класика");
+			    $("#answer"+1).text("Зряла класика");
+			    $("#answer"+2).text("Късна класика");
+			    $("#answer"+3).text("Проторенесанс");
+			    rightChoice=classics.indexOf(mainPainting.name);
+		    }
+ else if(vizantiq.indexOf(mainPainting.name)!=-1)
+		    {
+			    $("#answer"+0).text("Ранновизантийски период");
+			    $("#answer"+1).text("Средновизантийски период");
+			    $("#answer"+2).text("Късновизантийски период");
+			    $("#answer"+3).text("Зряла класика");
+			    rightChoice=vizantiq.indexOf(mainPainting.name);
+		    }	
+	else{
   rightChoice=randomNumberUpTo(3);
   for (var i=0;i<4;i++){
     if (i!=rightChoice){
@@ -371,10 +408,12 @@ function fillChoices(){
 		$("#answer"+i).text("Слави Трифонов");    
 	    }
 	    else{
+		    
     var wrongPainting=paintingWith(paintings,trait,usedIndices,usedValues);
     $("#answer"+i).text(wrongPainting[trait]);
       usedIndices.push(wrongPainting.id);
       usedValues.push(wrongPainting[trait]);
+	    }
 	    }
       
     }
@@ -383,7 +422,7 @@ function fillChoices(){
       //$("#answer"+i).addClass("correct")
       
     }
-  }
+  
  
   
    if(trait=="author"){
